@@ -1142,7 +1142,7 @@
       const blob = await zip.generateAsync({ type: 'blob' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'splashy-newtab-extension.zip';
+      a.download = pageTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-newtab-extension.zip';
       a.click();
       URL.revokeObjectURL(a.href);
     });
