@@ -276,7 +276,9 @@
       border-radius: 12px;
       padding: 24px;
       width: 100%;
-      max-width: 400px;
+      max-width: 520px;
+      max-height: 80vh;
+      overflow-y: auto;
       margin: 16px;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     }
@@ -284,35 +286,71 @@
     .modal h2 {
       font-size: 18px;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 12px;
       color: #202124;
     }
 
-    .modal p {
+    .modal-section {
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .modal-section summary {
       font-size: 13px;
+      font-weight: 600;
       color: #70757a;
-      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 12px;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-section summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .modal-section summary::before {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-left: 5px solid #70757a;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      transition: transform 0.15s;
+    }
+
+    .modal-section[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .modal-section-content {
+      padding: 0 12px 12px;
     }
 
     .modal-categories {
       list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 16px;
     }
 
     .modal-categories li {
       display: flex;
       align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid #e8eaed;
-    }
-
-    .modal-categories li:last-child {
-      border-bottom: none;
+      padding: 6px 0;
     }
 
     .modal-categories label {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       cursor: pointer;
       font-size: 14px;
       color: #202124;
@@ -325,19 +363,6 @@
       accent-color: #4285f4;
       cursor: pointer;
       flex-shrink: 0;
-    }
-
-    .modal-section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #70757a;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .modal-section-title:not(:first-child) {
-      margin-top: 20px;
     }
 
     .modal-engines {
@@ -511,12 +536,16 @@
         color: #e8eaed;
       }
 
-      .modal p {
+      .modal-section {
+        border-color: #5f6368;
+      }
+
+      .modal-section summary {
         color: #9aa0a6;
       }
 
-      .modal-categories li {
-        border-bottom-color: #5f6368;
+      .modal-section summary::before {
+        border-left-color: #9aa0a6;
       }
 
       .modal-categories label {
@@ -553,10 +582,18 @@
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <h2>Settings</h2>
-      <div class="modal-section-title">Search engine</div>
-      <ul class="modal-engines" id="modalEngines"></ul>
-      <div class="modal-section-title">Categories</div>
-      <ul class="modal-categories" id="modalCategories"></ul>
+      <details class="modal-section" open>
+        <summary>Search engine</summary>
+        <div class="modal-section-content">
+          <ul class="modal-engines" id="modalEngines"></ul>
+        </div>
+      </details>
+      <details class="modal-section" open>
+        <summary>Categories</summary>
+        <div class="modal-section-content">
+          <ul class="modal-categories" id="modalCategories"></ul>
+        </div>
+      </details>
       <button class="modal-close" id="modalClose">Done</button>
     </div>
   </div>
@@ -857,12 +894,6 @@
         searchBox.classList.add('no-suggestions');
       }
 
-      // Auto-select first match so Enter navigates to it
-      if (matches.length > 0) {
-        activeIndex = 0;
-        const items = container.querySelectorAll('.suggestion-item');
-        updateActive(items);
-      }
     }
 
     function escapeHtml(str) {
@@ -906,6 +937,12 @@
           navigateToSuggestion(activeIndex);
         } else {
           doSearch(searchInput.value);
+        }
+      } else if (e.key === 'Tab') {
+        if (currentSuggestions.length > 0) {
+          e.preventDefault();
+          activeIndex = 0;
+          updateActive(suggestionItems);
         }
       } else if (e.key === 'Escape') {
         document.getElementById('suggestions').classList.remove('visible');

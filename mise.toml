@@ -1,0 +1,3 @@
+[tools]
+caddy = "latest"
+just = "latest"
