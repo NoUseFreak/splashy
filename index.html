@@ -217,6 +217,16 @@
       padding: 16px;
       font-size: 13px;
       color: #70757a;
+      text-align: center;
+    }
+
+    .footer a {
+      color: #4285f4;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
     }
 
     /* Settings cog */
@@ -317,6 +327,79 @@
       flex-shrink: 0;
     }
 
+    .modal-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #70757a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .modal-section-title:not(:first-child) {
+      margin-top: 20px;
+    }
+
+    .modal-engines {
+      list-style: none;
+    }
+
+    .modal-engines li {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #e8eaed;
+    }
+
+    .modal-engines li:last-child {
+      border-bottom: none;
+    }
+
+    .modal-engines label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #202124;
+      width: 100%;
+    }
+
+    .modal-engines input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #4285f4;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .custom-url-input {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border: 1px solid #dfe1e5;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #202124;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .custom-url-input:focus {
+      border-color: #4285f4;
+    }
+
+    .custom-url-input::placeholder {
+      color: #9aa0a6;
+    }
+
+    .custom-url-hint {
+      font-size: 12px;
+      color: #9aa0a6;
+      margin-top: 4px;
+    }
+
     .modal-close {
       margin-top: 16px;
       width: 100%;
@@ -407,6 +490,10 @@
         color: #9aa0a6;
       }
 
+      .footer a {
+        color: #8ab4f8;
+      }
+
       .settings-btn {
         color: #9aa0a6;
       }
@@ -435,6 +522,24 @@
       .modal-categories label {
         color: #e8eaed;
       }
+
+      .modal-engines li {
+        border-bottom-color: #5f6368;
+      }
+
+      .modal-engines label {
+        color: #e8eaed;
+      }
+
+      .custom-url-input {
+        background: #202124;
+        border-color: #5f6368;
+        color: #e8eaed;
+      }
+
+      .custom-url-input:focus {
+        border-color: #8ab4f8;
+      }
     }
   </style>
 </head>
@@ -448,7 +553,9 @@
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <h2>Settings</h2>
-      <p>Show or hide link categories.</p>
+      <div class="modal-section-title">Search engine</div>
+      <ul class="modal-engines" id="modalEngines"></ul>
+      <div class="modal-section-title">Categories</div>
       <ul class="modal-categories" id="modalCategories"></ul>
       <button class="modal-close" id="modalClose">Done</button>
     </div>
@@ -476,7 +583,7 @@
 
   <div class="link-grid" id="linkGrid"></div>
 
-  <div class="footer">Splashy &mdash; your start page</div>
+  <div class="footer" id="footer">Splashy &mdash; your start page</div>
 
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
   <script>
@@ -485,6 +592,36 @@
     let hiddenCategories = JSON.parse(localStorage.getItem('splashy-hidden-categories') || '[]');
     let activeIndex = -1;
     let currentSuggestions = [];
+
+    const searchEngines = [
+      { id: 'google',     name: 'Google',      url: 'https://www.google.com/search?q=%s' },
+      { id: 'bing',       name: 'Bing',        url: 'https://www.bing.com/search?q=%s' },
+      { id: 'duckduckgo', name: 'DuckDuckGo',  url: 'https://duckduckgo.com/?q=%s' },
+      { id: 'brave',      name: 'Brave',       url: 'https://search.brave.com/search?q=%s' },
+      { id: 'ecosia',     name: 'Ecosia',      url: 'https://www.ecosia.org/search?q=%s' },
+      { id: 'startpage',  name: 'Startpage',   url: 'https://www.startpage.com/sp/search?query=%s' },
+      { id: 'custom',     name: 'Custom URL',  url: '' },
+    ];
+
+    let selectedEngine = localStorage.getItem('splashy-search-engine') || 'google';
+    let customSearchUrl = localStorage.getItem('splashy-custom-search-url') || '';
+
+    function saveSearchEngine() {
+      localStorage.setItem('splashy-search-engine', selectedEngine);
+      localStorage.setItem('splashy-custom-search-url', customSearchUrl);
+    }
+
+    function getSearchUrl(query) {
+      const engine = searchEngines.find(e => e.id === selectedEngine) || searchEngines[0];
+      const template = engine.id === 'custom' ? customSearchUrl : engine.url;
+      if (!template) return 'https://www.google.com/search?q=' + encodeURIComponent(query);
+      return template.replace('%s', encodeURIComponent(query));
+    }
+
+    function getSearchEngineName() {
+      const engine = searchEngines.find(e => e.id === selectedEngine) || searchEngines[0];
+      return engine.id === 'custom' ? 'Custom' : engine.name;
+    }
 
     function saveHiddenCategories() {
       localStorage.setItem('splashy-hidden-categories', JSON.stringify(hiddenCategories));
@@ -524,6 +661,20 @@
         const title = data.title || 'Splashy';
         renderLogo(title, data.image);
         document.title = title;
+
+        const footer = document.getElementById('footer');
+        if (data.footer !== undefined) {
+          footer.innerHTML = escapeHtml(data.footer);
+        }
+        if (data.editUrl) {
+          const editLine = document.createElement('div');
+          const editLink = document.createElement('a');
+          editLink.href = data.editUrl;
+          editLink.textContent = 'Edit links';
+          editLine.appendChild(document.createTextNode('Missing a link? '));
+          editLine.appendChild(editLink);
+          footer.appendChild(editLine);
+        }
 
         allCategories = data.categories.map(c => c.name);
 
@@ -571,6 +722,54 @@
     }
 
     function renderSettingsModal() {
+      // Search engines
+      const engineList = document.getElementById('modalEngines');
+      engineList.innerHTML = '';
+
+      searchEngines.forEach(engine => {
+        const li = document.createElement('li');
+        const label = document.createElement('label');
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'searchEngine';
+        radio.value = engine.id;
+        radio.checked = selectedEngine === engine.id;
+        radio.addEventListener('change', () => {
+          selectedEngine = engine.id;
+          saveSearchEngine();
+          renderSettingsModal();
+        });
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(engine.name));
+        li.appendChild(label);
+
+        if (engine.id === 'custom') {
+          const urlInput = document.createElement('input');
+          urlInput.type = 'text';
+          urlInput.className = 'custom-url-input';
+          urlInput.placeholder = 'https://example.com/search?q=%s';
+          urlInput.value = customSearchUrl;
+          urlInput.addEventListener('input', () => {
+            customSearchUrl = urlInput.value;
+            saveSearchEngine();
+          });
+          urlInput.addEventListener('focus', () => {
+            selectedEngine = 'custom';
+            radio.checked = true;
+            saveSearchEngine();
+          });
+          li.appendChild(urlInput);
+
+          const hint = document.createElement('div');
+          hint.className = 'custom-url-hint';
+          hint.textContent = 'Use %s as the query placeholder';
+          li.appendChild(hint);
+        }
+
+        engineList.appendChild(li);
+      });
+
+      // Categories
       const list = document.getElementById('modalCategories');
       list.innerHTML = '';
 
@@ -623,13 +822,13 @@
 
       let html = '';
 
-      // Google search hint at the top
+      // Search engine hint at the top
       html += `
-        <div class="search-hint" data-action="google">
+        <div class="search-hint" data-action="search">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
-          <span>Search Google for <strong>&quot;${escapeHtml(query)}&quot;</strong></span>
+          <span>Search ${escapeHtml(getSearchEngineName())} for <strong>&quot;${escapeHtml(query)}&quot;</strong></span>
         </div>
       `;
 
@@ -657,6 +856,13 @@
         container.classList.remove('visible');
         searchBox.classList.add('no-suggestions');
       }
+
+      // Auto-select first match so Enter navigates to it
+      if (matches.length > 0) {
+        activeIndex = 0;
+        const items = container.querySelectorAll('.suggestion-item');
+        updateActive(items);
+      }
     }
 
     function escapeHtml(str) {
@@ -665,8 +871,8 @@
       return div.innerHTML;
     }
 
-    function googleSearch(query) {
-      window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+    function doSearch(query) {
+      window.location.href = getSearchUrl(query);
     }
 
     function navigateToSuggestion(index) {
@@ -699,7 +905,7 @@
         if (activeIndex >= 0 && activeIndex < total) {
           navigateToSuggestion(activeIndex);
         } else {
-          googleSearch(searchInput.value);
+          doSearch(searchInput.value);
         }
       } else if (e.key === 'Escape') {
         document.getElementById('suggestions').classList.remove('visible');
@@ -718,11 +924,11 @@
       }
     }
 
-    // Click on Google search hint
+    // Click on search hint
     document.getElementById('suggestions').addEventListener('click', (e) => {
       const hint = e.target.closest('.search-hint');
       if (hint) {
-        googleSearch(searchInput.value);
+        doSearch(searchInput.value);
       }
     });
 

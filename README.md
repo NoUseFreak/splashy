@@ -20,11 +20,12 @@
 
 ## Features
 
-- **Google-style search box** — type and hit Enter to search Google
+- **Search box** — type and hit Enter to search with your preferred engine
+- **Search engine choice** — pick from Google, Bing, DuckDuckGo, Brave, Ecosia, Startpage, or set a custom URL
 - **Link suggestions** — autocomplete from a YAML-defined link inventory as you type
 - **Keyboard navigation** — arrow keys to select suggestions, Enter to go, Escape to dismiss
 - **Category grid** — all links displayed below the search box, grouped by category
-- **Settings modal** — cog icon to show/hide categories, persisted in localStorage
+- **Settings modal** — cog icon to choose search engine and show/hide categories, persisted in localStorage
 - **Custom title & logo** — set a page title or image URL in `links.yaml`
 - **Dark mode** — automatic, follows your OS preference
 - **Static site** — no backend, just HTML + JS + a YAML file
@@ -69,6 +70,8 @@ All configuration lives in `links.yaml`:
 ```yaml
 title: My Start Page
 # image: https://example.com/logo.png
+# footer: My custom footer text
+# editUrl: https://github.com/you/your-repo/edit/main/links.yaml
 
 categories:
   - name: Work
@@ -88,6 +91,8 @@ categories:
 | ---------------------------- | ---------------------------------------------------------- |
 | `title`                      | Page title shown as a colorful logo and in the browser tab |
 | `image`                      | Optional image URL that replaces the text logo             |
+| `footer`                     | Optional footer text (defaults to "Splashy — your start page") |
+| `editUrl`                    | Optional URL to edit `links.yaml` (shows "Missing a link?" in footer) |
 | `categories[].name`          | Category heading                                           |
 | `categories[].links[].title` | Display name for the link                                  |
 | `categories[].links[].url`   | Target URL                                                 |
