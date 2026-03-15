@@ -229,6 +229,70 @@
       text-decoration: underline;
     }
 
+    /* Homepage hint */
+    .homepage-hint {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      font-size: 12px;
+      color: #70757a;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .homepage-hint a {
+      color: #70757a;
+      text-decoration: none;
+    }
+
+    .homepage-hint a:hover {
+      text-decoration: underline;
+    }
+
+    .homepage-tooltip {
+      display: none;
+      position: absolute;
+      bottom: 24px;
+      right: 0;
+      width: 260px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      font-size: 13px;
+      color: #202124;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .homepage-tooltip.visible {
+      display: block;
+    }
+
+    .homepage-tooltip strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .homepage-tooltip ol {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .homepage-tooltip li {
+      margin-bottom: 2px;
+    }
+
+    .homepage-tooltip kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      font-size: 11px;
+      font-family: inherit;
+      background: #f1f3f4;
+      border: 1px solid #dfe1e5;
+      border-radius: 3px;
+    }
+
     /* Settings cog */
     .settings-btn {
       position: fixed;
@@ -569,6 +633,18 @@
       .custom-url-input:focus {
         border-color: #8ab4f8;
       }
+
+      .homepage-tooltip {
+        background: #303134;
+        color: #e8eaed;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      .homepage-tooltip kbd {
+        background: #3c4043;
+        border-color: #5f6368;
+        color: #e8eaed;
+      }
     }
   </style>
 </head>
@@ -622,7 +698,33 @@
 
   <div class="footer" id="footer">Splashy &mdash; your start page</div>
 
+  <div class="homepage-hint" id="homepageHint">
+    <a href="#" id="homepageLink">Make this your homepage</a>
+    <div class="homepage-tooltip" id="homepageTooltip">
+      <strong>Chrome / Edge</strong>
+      <ol>
+        <li><a href="#" id="downloadExtension">Download extension</a> and unzip it</li>
+        <li>Go to <code>chrome://extensions</code></li>
+        <li>Enable "Developer mode"</li>
+        <li>Click "Load unpacked" and select the folder</li>
+      </ol>
+      <strong>Firefox</strong>
+      <ol>
+        <li>Open Settings &rarr; Home</li>
+        <li>Set "New Windows and Tabs" to "Custom URLs"</li>
+        <li>Paste this page's URL</li>
+      </ol>
+      <strong>Safari</strong>
+      <ol>
+        <li>Open Settings &rarr; General</li>
+        <li>Set "New tabs open with" to "Homepage"</li>
+        <li>Paste this page's URL in "Homepage"</li>
+      </ol>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js"></script>
   <script>
     let allLinks = [];
     let allCategories = [];
@@ -1001,6 +1103,48 @@
         modalOverlay.classList.remove('visible');
         searchInput.focus();
       }
+    });
+
+    // Homepage tooltip
+    const homepageTooltip = document.getElementById('homepageTooltip');
+
+    document.getElementById('homepageLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      homepageTooltip.classList.toggle('visible');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#homepageHint')) {
+        homepageTooltip.classList.remove('visible');
+      }
+    });
+
+    // Download Chrome extension
+    document.getElementById('downloadExtension').addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const pageUrl = window.location.href;
+      const pageTitle = document.title || 'Splashy';
+      const extName = pageTitle + ' New Tab';
+      const manifest = JSON.stringify({
+        manifest_version: 3,
+        name: extName,
+        description: 'Opens ' + pageTitle + ' as your new tab page.',
+        version: '1.0.0',
+        chrome_url_overrides: { newtab: 'newtab.html' }
+      }, null, 2);
+      const newtab = `<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n<script src="redirect.js"><\/script>\n</body>\n</html>`;
+      const redirectJs = `window.location.replace(${JSON.stringify(pageUrl)});`;
+      const zip = new JSZip();
+      zip.file('manifest.json', manifest);
+      zip.file('newtab.html', newtab);
+      zip.file('redirect.js', redirectJs);
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'splashy-newtab-extension.zip';
+      a.click();
+      URL.revokeObjectURL(a.href);
     });
 
     // Load on page ready
