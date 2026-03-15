@@ -86,3 +86,17 @@ jobs:
 
       - name: Push chart to OCI registry
         run: helm push .helm-packages/*.tgz oci://${{ env.REGISTRY }}/${GITHUB_REPOSITORY_OWNER,,}/charts
+
+  release:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [build-and-push, publish-chart]
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "${{ github.ref_name }}" --repo "${{ github.repository }}" --generate-notes
