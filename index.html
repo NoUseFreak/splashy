@@ -229,31 +229,37 @@
       text-decoration: underline;
     }
 
-    /* Homepage hint */
-    .homepage-hint {
+    /* Bottom hints */
+    .bottom-hint {
       position: fixed;
       bottom: 16px;
-      right: 16px;
       font-size: 12px;
       color: #70757a;
       cursor: pointer;
       user-select: none;
     }
 
-    .homepage-hint a {
+    .bottom-hint-left {
+      left: 16px;
+    }
+
+    .bottom-hint-right {
+      right: 16px;
+    }
+
+    .bottom-hint a {
       color: #70757a;
       text-decoration: none;
     }
 
-    .homepage-hint a:hover {
+    .bottom-hint a:hover {
       text-decoration: underline;
     }
 
-    .homepage-tooltip {
+    .bottom-tooltip {
       display: none;
       position: absolute;
       bottom: 24px;
-      right: 0;
       width: 260px;
       background: #fff;
       border-radius: 8px;
@@ -265,25 +271,33 @@
       text-align: left;
     }
 
-    .homepage-tooltip.visible {
+    .bottom-hint-left .bottom-tooltip {
+      left: 0;
+    }
+
+    .bottom-hint-right .bottom-tooltip {
+      right: 0;
+    }
+
+    .bottom-tooltip.visible {
       display: block;
     }
 
-    .homepage-tooltip strong {
+    .bottom-tooltip strong {
       display: block;
       margin-bottom: 4px;
     }
 
-    .homepage-tooltip ol {
+    .bottom-tooltip ol {
       margin: 0;
       padding-left: 18px;
     }
 
-    .homepage-tooltip li {
+    .bottom-tooltip li {
       margin-bottom: 2px;
     }
 
-    .homepage-tooltip kbd {
+    .bottom-tooltip kbd {
       display: inline-block;
       padding: 1px 5px;
       font-size: 11px;
@@ -634,13 +648,13 @@
         border-color: #8ab4f8;
       }
 
-      .homepage-tooltip {
+      .bottom-tooltip {
         background: #303134;
         color: #e8eaed;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
       }
 
-      .homepage-tooltip kbd {
+      .bottom-tooltip kbd {
         background: #3c4043;
         border-color: #5f6368;
         color: #e8eaed;
@@ -698,9 +712,13 @@
 
   <div class="footer" id="footer">Splashy &mdash; your start page</div>
 
-  <div class="homepage-hint" id="homepageHint">
+  <div class="bottom-hint bottom-hint-left" id="editHint" style="display:none">
+    <a href="#" id="editLink">Missing a link? Edit links</a>
+  </div>
+
+  <div class="bottom-hint bottom-hint-right" id="homepageHint">
     <a href="#" id="homepageLink">Make this your homepage</a>
-    <div class="homepage-tooltip" id="homepageTooltip">
+    <div class="bottom-tooltip" id="homepageTooltip">
       <strong>Chrome / Edge</strong>
       <ol>
         <li><a href="#" id="downloadExtension">Download extension</a> and unzip it</li>
@@ -806,13 +824,10 @@
           footer.innerHTML = escapeHtml(data.footer);
         }
         if (data.editUrl) {
-          const editLine = document.createElement('div');
-          const editLink = document.createElement('a');
+          const editHint = document.getElementById('editHint');
+          const editLink = document.getElementById('editLink');
           editLink.href = data.editUrl;
-          editLink.textContent = 'Edit links';
-          editLine.appendChild(document.createTextNode('Missing a link? '));
-          editLine.appendChild(editLink);
-          footer.appendChild(editLine);
+          editHint.style.display = '';
         }
 
         allCategories = data.categories.map(c => c.name);
