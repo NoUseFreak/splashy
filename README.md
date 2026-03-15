@@ -1,6 +1,6 @@
 <p align="center">
   <span style="font-size:64px"><b>
-    <span style="color:#4285f4">S</span><span style="color:#ea4335">p</span><span style="color:#fbbc05">l</span><span style="color:#4285f4">a</span><span style="color:#34a853">s</span><span style="color:#ea4335">h</span><span style="color:#4285f4">y</span>
+    <span style="color:#6366f1">S</span><span style="color:#ec4899">p</span><span style="color:#f59e0b">l</span><span style="color:#10b981">a</span><span style="color:#3b82f6">s</span><span style="color:#8b5cf6">h</span><span style="color:#6366f1">y</span>
   </b></span>
 </p>
 
