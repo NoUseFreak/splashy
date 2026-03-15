@@ -63,8 +63,7 @@ jobs:
     needs: build-and-push
 
     permissions:
-      contents: write
-      pages: write
+      packages: write
 
     steps:
       - name: Checkout
@@ -72,6 +71,9 @@ jobs:
 
       - name: Install Helm
         uses: azure/setup-helm@v4
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
 
       - name: Set chart version from tag
         run: |
@@ -82,23 +84,5 @@ jobs:
       - name: Package chart
         run: helm package chart/splashy -d .helm-packages
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
-          fetch-depth: 0
-
-      - name: Update Helm repo index
-        run: |
-          cp .helm-packages/*.tgz gh-pages/
-          helm repo index gh-pages --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
-
-      - name: Push to gh-pages
-        working-directory: gh-pages
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Publish Helm chart ${GITHUB_REF#refs/tags/}"
-          git push
+      - name: Push chart to OCI registry
+        run: helm push .helm-packages/*.tgz oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts

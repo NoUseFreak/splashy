@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://github.com/NoUseFreak/splashy/actions/workflows/publish.yml"><img src="https://github.com/NoUseFreak/splashy/actions/workflows/publish.yml/badge.svg" alt="Build"></a>
   <a href="https://github.com/NoUseFreak/splashy/pkgs/container/splashy"><img src="https://img.shields.io/badge/ghcr.io-splashy-blue?logo=docker&logoColor=white" alt="Docker"></a>
-  <a href="https://nousefreak.github.io/splashy"><img src="https://img.shields.io/badge/Helm-chart-0f1689?logo=helm&logoColor=white" alt="Helm Chart"></a>
+  <a href="https://github.com/NoUseFreak/splashy/pkgs/container/charts%2Fsplashy"><img src="https://img.shields.io/badge/Helm-chart-0f1689?logo=helm&logoColor=white" alt="Helm Chart"></a>
   <a href="https://github.com/NoUseFreak/splashy/releases/latest"><img src="https://img.shields.io/github/v/release/NoUseFreak/splashy?color=green&logo=github" alt="Release"></a>
   <a href="https://github.com/NoUseFreak/splashy/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NoUseFreak/splashy" alt="License"></a>
 </p>
@@ -53,15 +53,13 @@ docker run -p 8080:8080 -v ./links.yaml:/srv/links.yaml ghcr.io/nousefreak/splas
 ### Helm
 
 ```bash
-helm repo add splashy https://nousefreak.github.io/splashy
-helm repo update
-helm install splashy splashy/splashy
+helm install splashy oci://ghcr.io/nousefreak/charts/splashy
 ```
 
 With custom links:
 
 ```bash
-helm install splashy splashy/splashy -f my-values.yaml
+helm install splashy oci://ghcr.io/nousefreak/charts/splashy -f my-values.yaml
 ```
 
 ## Configuration
