@@ -1,0 +1,11 @@
+Splashy has been deployed!
+
+To access it, run:
+
+  kubectl port-forward svc/{{ include "splashy.fullname" . }} 8080:{{ .Values.service.port }}
+
+Then open http://localhost:8080
+
+To customize links, update the `links` value in your values.yaml and upgrade:
+
+  helm upgrade {{ .Release.Name }} chart/splashy -f my-values.yaml

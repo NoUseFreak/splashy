@@ -1,0 +1,254 @@
+title: Splashy
+# image: https://example.com/logo.png
+
+categories:
+  - name: Work
+    links:
+      - title: Gmail
+        url: https://mail.google.com
+      - title: Google Calendar
+        url: https://calendar.google.com
+      - title: Google Drive
+        url: https://drive.google.com
+      - title: GitHub
+        url: https://github.com
+      - title: Jira
+        url: https://jira.atlassian.com
+
+  - name: Social
+    links:
+      - title: YouTube
+        url: https://youtube.com
+      - title: Reddit
+        url: https://reddit.com
+      - title: Twitter / X
+        url: https://x.com
+      - title: Hacker News
+        url: https://news.ycombinator.com
+
+  - name: Dev
+    links:
+      - title: Stack Overflow
+        url: https://stackoverflow.com
+      - title: Go Docs
+        url: https://pkg.go.dev
+      - title: MDN Web Docs
+        url: https://developer.mozilla.org
+      - title: Can I Use
+        url: https://caniuse.com
+
+  - name: News
+    links:
+      - title: BBC News
+        url: https://bbc.com/news
+      - title: Reuters
+        url: https://reuters.com
+      - title: The Guardian
+        url: https://theguardian.com
+      - title: NPR
+        url: https://npr.org
+      - title: Ars Technica
+        url: https://arstechnica.com
+      - title: The Verge
+        url: https://theverge.com
+      - title: TechCrunch
+        url: https://techcrunch.com
+      - title: Wired
+        url: https://wired.com
+
+  - name: Finance
+    links:
+      - title: Yahoo Finance
+        url: https://finance.yahoo.com
+      - title: Bloomberg
+        url: https://bloomberg.com
+      - title: MarketWatch
+        url: https://marketwatch.com
+      - title: CoinGecko
+        url: https://coingecko.com
+      - title: Investopedia
+        url: https://investopedia.com
+      - title: Google Finance
+        url: https://google.com/finance
+      - title: Trading Economics
+        url: https://tradingeconomics.com
+
+  - name: Cloud
+    links:
+      - title: AWS Console
+        url: https://console.aws.amazon.com
+      - title: Google Cloud Console
+        url: https://console.cloud.google.com
+      - title: Azure Portal
+        url: https://portal.azure.com
+      - title: DigitalOcean
+        url: https://cloud.digitalocean.com
+      - title: Cloudflare Dashboard
+        url: https://dash.cloudflare.com
+      - title: Vercel
+        url: https://vercel.com/dashboard
+      - title: Netlify
+        url: https://app.netlify.com
+      - title: Fly.io
+        url: https://fly.io/dashboard
+      - title: Railway
+        url: https://railway.app/dashboard
+      - title: Render
+        url: https://dashboard.render.com
+
+  - name: Design
+    links:
+      - title: Figma
+        url: https://figma.com
+      - title: Dribbble
+        url: https://dribbble.com
+      - title: Behance
+        url: https://behance.net
+      - title: Coolors
+        url: https://coolors.co
+      - title: Google Fonts
+        url: https://fonts.google.com
+      - title: Unsplash
+        url: https://unsplash.com
+      - title: Font Awesome
+        url: https://fontawesome.com
+      - title: Canva
+        url: https://canva.com
+      - title: Adobe Color
+        url: https://color.adobe.com
+
+  - name: Productivity
+    links:
+      - title: Notion
+        url: https://notion.so
+      - title: Todoist
+        url: https://todoist.com
+      - title: Trello
+        url: https://trello.com
+      - title: Slack
+        url: https://slack.com
+      - title: Linear
+        url: https://linear.app
+      - title: Obsidian
+        url: https://obsidian.md
+      - title: Google Keep
+        url: https://keep.google.com
+      - title: Miro
+        url: https://miro.com
+      - title: Asana
+        url: https://asana.com
+      - title: Monday.com
+        url: https://monday.com
+
+  - name: Learning
+    links:
+      - title: Udemy
+        url: https://udemy.com
+      - title: Coursera
+        url: https://coursera.org
+      - title: Khan Academy
+        url: https://khanacademy.org
+      - title: freeCodeCamp
+        url: https://freecodecamp.org
+      - title: Pluralsight
+        url: https://pluralsight.com
+      - title: edX
+        url: https://edx.org
+      - title: LeetCode
+        url: https://leetcode.com
+      - title: Exercism
+        url: https://exercism.org
+      - title: Codecademy
+        url: https://codecademy.com
+      - title: MIT OpenCourseWare
+        url: https://ocw.mit.edu
+      - title: O'Reilly
+        url: https://oreilly.com
+
+  - name: Entertainment
+    links:
+      - title: Netflix
+        url: https://netflix.com
+      - title: Spotify
+        url: https://open.spotify.com
+      - title: Twitch
+        url: https://twitch.tv
+      - title: IMDb
+        url: https://imdb.com
+      - title: Disney+
+        url: https://disneyplus.com
+      - title: SoundCloud
+        url: https://soundcloud.com
+      - title: Letterboxd
+        url: https://letterboxd.com
+
+  - name: AI
+    links:
+      - title: ChatGPT
+        url: https://chat.openai.com
+      - title: Claude
+        url: https://claude.ai
+      - title: Gemini
+        url: https://gemini.google.com
+      - title: Hugging Face
+        url: https://huggingface.co
+      - title: Replicate
+        url: https://replicate.com
+      - title: Perplexity
+        url: https://perplexity.ai
+      - title: Midjourney
+        url: https://midjourney.com
+      - title: Stable Diffusion
+        url: https://stability.ai
+      - title: Papers with Code
+        url: https://paperswithcode.com
+      - title: Ollama
+        url: https://ollama.com
+
+  - name: DevOps
+    links:
+      - title: Docker Hub
+        url: https://hub.docker.com
+      - title: Grafana
+        url: https://grafana.com
+      - title: Terraform Registry
+        url: https://registry.terraform.io
+      - title: Ansible Docs
+        url: https://docs.ansible.com
+      - title: Prometheus
+        url: https://prometheus.io
+      - title: ArgoCD
+        url: https://argoproj.github.io/cd
+      - title: Helm Charts
+        url: https://artifacthub.io
+      - title: GitHub Actions
+        url: https://github.com/features/actions
+      - title: CircleCI
+        url: https://circleci.com
+      - title: Datadog
+        url: https://datadoghq.com
+      - title: PagerDuty
+        url: https://pagerduty.com
+      - title: Sentry
+        url: https://sentry.io
+
+  - name: Reference
+    links:
+      - title: Wikipedia
+        url: https://wikipedia.org
+      - title: Wolfram Alpha
+        url: https://wolframalpha.com
+      - title: Archive.org
+        url: https://archive.org
+      - title: Google Scholar
+        url: https://scholar.google.com
+      - title: DeepL Translate
+        url: https://deepl.com
+      - title: Regex101
+        url: https://regex101.com
+      - title: JSON Formatter
+        url: https://jsonformatter.org
+      - title: ExplainShell
+        url: https://explainshell.com
+      - title: tldr pages
+        url: https://tldr.sh

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "splashy.fullname" . }}-links
+  labels:
+    {{- include "splashy.labels" . | nindent 4 }}
+data:
+  links.yaml: |
+    {{- .Values.links | nindent 4 }}
